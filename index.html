@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 AIC Task Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .category {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .category:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .category-header {
+            border-left: 4px solid;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .task-count {
+            font-weight: 600;
+            color: #666;
+            min-width: 50px;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .task {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .task:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: rgba(102, 126, 234, 0.3);
+            transform: translateX(4px);
+        }
+        
+        .task.completed {
+            opacity: 0.6;
+        }
+        
+        .task.completed .task-text {
+            text-decoration: line-through;
+        }
+        
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: white;
+            transition: all 0.2s;
+        }
+        
+        .task.completed .checkbox {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .task-text {
+            flex: 1;
+            line-height: 1.5;
+        }
+        
+        .assignee {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 AIC Task Dashboard</h1>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Total Tasks</div>
+                    <div class="stat-value" id="totalTasks">51</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Completed</div>
+                    <div class="stat-value" id="completedTasks">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Progress</div>
+                    <div class="stat-value" id="progress">0%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Remaining</div>
+                    <div class="stat-value" id="remaining">51</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showView('overview')">📊 Overview</button>
+            <button class="tab" onclick="showView('team')">👥 Team View</button>
+            <button class="tab" onclick="showView('priority')">🔥 Priority</button>
+        </div>
+        
+        <div id="overview" class="grid">
+            <!-- Categories will be inserted here -->
+        </div>
+        
+        <div id="team" class="grid hidden">
+            <!-- Team view will be inserted here -->
+        </div>
+        
+        <div id="priority" class="grid hidden">
+            <!-- Priority view will be inserted here -->
+        </div>
+    </div>
+    
+    <script>
+        const tasks = {
+            importantDaily: {
+                name: '🔥 Important Daily',
+                color: '#ef4444',
+                tasks: [
+                    'R&D Testing Projections from KK.',
+                    'UK Account Finalization.',
+                    'Pia Credit Entry till October 2025.',
+                    'USA Shared Expense entry of 2025.',
+                    'India Batches 20, 21 & 22.',
+                    'LRN Statement for Phase-III.',
+                    'OCBC Statements to HK.',
+                    'Call with Avisha.',
+                    'MOM of the Meeting on 12.01.2026.',
+                    'ERP Live Update.',
+                    'USA Cashflow.',
+                    'ERP OCBC Reconciliation.',
+                    'India Batch for Jan-26.',
+                    'Daily Report',
+                    'AIC Report share on the Group.',
+                    'Performance reports to be shared on Weekly Basis.',
+                    'Accounts to Pia Ma\'am.',
+                    'DHL Account for UK.',
+                    'Emmanuel Loan Approval.',
+                    'Verification of Identity.',
+                    'TotalEnergies Transition Follow Up.',
+                    'GBL Agreement Sign Off.',
+                    'AGTC Review Meeting - work on details.'
+                ]
+            },
+            common: {
+                name: '📋 Common Tasks',
+                color: '#3b82f6',
+                tasks: [
+                    { text: 'PAYE Payment of Evolve Charity Trust.', assignee: 'PK' },
+                    { text: 'Cashflow Working - Daily.', assignee: 'PK' },
+                    { text: 'R&D Testing Projections from KK.', assignee: 'KK' }
+                ]
+            },
+            ma: {
+                name: '👤 MA Tasks',
+                color: '#8b5cf6',
+                tasks: [
+                    'UK Account Finalization.',
+                    'Pia Credit Entry till October 2025.',
+                    'USA Shared Expense entry of 2025.',
+                    'India Batches 20, 21 & 22.',
+                    'LRN Statement for Phase-III.',
+                    'OCBC Statements to HK.',
+                    'Call with Avisha.',
+                    'MOM of the Meeting on 12.01.2026.'
+                ]
+            },
+            vr: {
+                name: '👤 VR Tasks',
+                color: '#ec4899',
+                tasks: [
+                    'ERP Live Update.',
+                    'USA Cashflow.',
+                    'ERP OCBC Reconciliation.',
+                    'India Batch for Jan-26.',
+                    'Daily Report',
+                    'AIC Report share on the Group.',
+                    'Performance reports to be shared on Weekly Basis.'
+                ]
+            },
+            ua: {
+                name: '👤 UA Tasks',
+                color: '#f59e0b',
+                tasks: [
+                    'Accounts to Pia Ma\'am.',
+                    'DHL Account for UK.',
+                    'Emmanuel Loan Approval.',
+                    'Verification of Identity.',
+                    'TotalEnergies Transition Follow Up.',
+                    'GBL Agreement Sign Off.',
+                    'AGTC Review Meeting - work on details.'
+                ]
+            },
+            dubai: {
+                name: '🏢 Dubai Company',
+                color: '#10b981',
+                tasks: [
+                    'Review of Citibank Account Opening documents from Sharan.'
+                ]
+            },
+            payments: {
+                name: '💰 Pending Payments',
+                color: '#f97316',
+                tasks: [
+                    'Sai Salary Payment.',
+                    'Gajanan Reimbursement for Abhay\'s Food.'
+                ]
+            }
+        };
+        
+        let completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '{}');
+        
+        function renderCategory(key, category, container) {
+            const taskList = Array.isArray(category.tasks) ? category.tasks : [];
+            const completed = taskList.filter((_, i) => completedTasks[`${key}-${i}`]).length;
+            const total = taskList.length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            const div = document.createElement('div');
+            div.className = 'category';
+            div.innerHTML = `
+                <div class="category-header" style="border-left-color: ${category.color}">
+                    <div class="category-title">${category.name}</div>
+                    <div class="progress-container">
+                        <span class="task-count">${completed}/${total}</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentage}%; background: ${category.color}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tasks">
+                    ${taskList.map((task, i) => {
+                        const taskText = typeof task === 'string' ? task : task.text;
+                        const assignee = typeof task === 'object' ? task.assignee : '';
+                        const isCompleted = completedTasks[`${key}-${i}`];
+                        return `
+                            <div class="task ${isCompleted ? 'completed' : ''}" onclick="toggleTask('${key}', ${i})">
+                                <div class="checkbox">${isCompleted ? '✓' : ''}</div>
+                                <div class="task-text">
+                                    ${taskText}
+                                    ${assignee ? `<div class="assignee">${assignee}</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            container.appendChild(div);
+        }
+        
+        function toggleTask(category, index) {
+            const key = `${category}-${index}`;
+            completedTasks[key] = !completedTasks[key];
+            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+            renderAll();
+        }
+        
+        function updateStats() {
+            let total = 0;
+            let completed = 0;
+            Object.keys(tasks).forEach(key => {
+                const taskList = tasks[key].tasks;
+                total += taskList.length;
+                taskList.forEach((_, i) => {
+                    if (completedTasks[`${key}-${i}`]) completed++;
+                });
+            });
+            
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('progress').textContent = Math.round((completed / total) * 100) + '%';
+            document.getElementById('remaining').textContent = total - completed;
+        }
+        
+        function renderAll() {
+            const overview = document.getElementById('overview');
+            const team = document.getElementById('team');
+            const priority = document.getElementById('priority');
+            
+            overview.innerHTML = '';
+            team.innerHTML = '';
+            priority.innerHTML = '';
+            
+            // Overview - all categories
+            Object.keys(tasks).forEach(key => {
+                renderCategory(key, tasks[key], overview);
+            });
+            
+            // Team view
+            ['ma', 'vr', 'ua', 'common'].forEach(key => {
+                renderCategory(key, tasks[key], team);
+            });
+            
+            // Priority view
+            ['importantDaily', 'payments', 'dubai'].forEach(key => {
+                renderCategory(key, tasks[key], priority);
+            });
+            
+            updateStats();
+        }
+        
+        function showView(view) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('overview').classList.add('hidden');
+            document.getElementById('team').classList.add('hidden');
+            document.getElementById('priority').classList.add('hidden');
+            document.getElementById(view).classList.remove('hidden');
+        }
+        
+        renderAll();
+    </script>
+</body>
+</html>
