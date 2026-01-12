@@ -464,7 +464,7 @@
                     <option value="active">Active Only</option>
                     <option value="completed">Completed Only</option>
                 </select>
-                <button class="btn" onclick="exportToPDF()">📄 Export PDF</button>
+                <button class="btn" onclick="exportToExcel()">📊 Export Excel</button>
                 <button class="btn btn-secondary" onclick="openAddTaskModal()">➕ Add Task</button>
             </div>
             
@@ -735,7 +735,7 @@
                                 <div class="task-actions">
                                     <button class="task-action-btn" onclick="editTask('${key}', ${originalIndex})" title="Edit">✏️</button>
                                     <button class="task-action-btn" onclick="deleteTask('${key}', ${originalIndex})" title="Delete">🗑️</button>
-                                    ${task.notes ? `<button class="task-action-btn" onclick="showNotes('${task.notes}')" title="View Notes">📝</button>` : ''}
+                                    ${task.notes ? `<button class="task-action-btn" onclick="showNotes('${task.notes.replace(/'/g, "\\'")}' )" title="View Notes">📝</button>` : ''}
                                 </div>
                             </div>
                         `;
@@ -776,7 +776,7 @@
         }
         
         function showNotes(notes) {
-            alert('Notes:\n\n' + notes);
+            alert('Notes:\\n\\n' + notes);
         }
         
         function openAddTaskModal(category = 'importantDaily') {
@@ -874,31 +874,32 @@
             document.getElementById(view).classList.remove('hidden');
         }
         
-        function exportToPDF() {
-            let content = 'AIC TASK DASHBOARD\\n\\n';
-            content += `Generated: ${new Date().toLocaleString()}\\n\\n`;
+        function exportToExcel() {
+            // Create CSV content
+            let csv = 'Category,Task,Status,Priority,Assignee,Deadline,Notes\\n';
             
             Object.keys(tasks).forEach(key => {
                 const category = tasks[key];
-                content += `\\n${category.name}\\n${'='.repeat(50)}\\n`;
-                
                 category.tasks.forEach((task, i) => {
-                    const status = completedTasks[`${key}-${i}`] ? '[✓]' : '[ ]';
-                    content += `${status} ${task.text}\\n`;
-                    if (task.assignee) content += `   Assignee: ${task.assignee}\\n`;
-                    if (task.priority) content += `   Priority: ${task.priority.toUpperCase()}\\n`;
-                    if (task.deadline) content += `   Deadline: ${task.deadline}\\n`;
-                    if (task.notes) content += `   Notes: ${task.notes}\\n`;
-                    content += '\\n';
+                    const status = completedTasks[`${key}-${i}`] ? 'Completed' : 'Active';
+                    const categoryName = category.name.replace(/[^a-zA-Z0-9 ]/g, '');
+                    const taskText = `"${task.text.replace(/"/g, '""')}"`;
+                    const priority = (task.priority || 'medium').toUpperCase();
+                    const assignee = task.assignee || '';
+                    const deadline = task.deadline || '';
+                    const notes = task.notes ? `"${task.notes.replace(/"/g, '""')}"` : '';
+                    
+                    csv += `${categoryName},${taskText},${status},${priority},${assignee},${deadline},${notes}\\n`;
                 });
             });
             
-            const blob = new Blob([content], { type: 'text/plain' });
+            // Create blob and download
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `AIC-Tasks-${new Date().toISOString().split('T')[0]}.txt`;
-            a.click();
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `AIC-Tasks-${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
             URL.revokeObjectURL(url);
         }
         
