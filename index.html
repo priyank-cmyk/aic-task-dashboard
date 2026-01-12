@@ -227,32 +227,12 @@
         }
         
         .tasks {
-            max-height: 350px;
-            overflow-y: auto;
-            padding-right: 0.4rem;
-        }
-        
-        .tasks::-webkit-scrollbar {
-            width: 5px;
-        }
-        
-        .tasks::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 10px;
-        }
-        
-        .tasks::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-        }
-        
-        .tasks::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            /* Removed max-height and overflow */
         }
         
         .task {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 0.6rem;
             padding: 0.5rem;
             background: rgba(0, 0, 0, 0.02);
@@ -311,19 +291,22 @@
         
         .task-content {
             flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
         
         .task-text {
+            flex: 1;
             line-height: 1.3;
-            margin-bottom: 0.3rem;
             font-size: 0.85rem;
         }
         
         .task-meta {
             display: flex;
             gap: 0.3rem;
-            flex-wrap: wrap;
             align-items: center;
+            flex-shrink: 0;
         }
         
         .assignee, .priority-badge {
@@ -332,6 +315,7 @@
             border-radius: 12px;
             font-size: 0.65rem;
             font-weight: 600;
+            white-space: nowrap;
         }
         
         .assignee {
@@ -415,10 +399,6 @@
                 width: 100%;
             }
             
-            .tasks {
-                max-height: 250px;
-            }
-            
             .stats {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -433,6 +413,16 @@
             
             .stat-value {
                 font-size: 1rem;
+            }
+            
+            .task-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+            
+            .task-meta {
+                width: 100%;
             }
         }
         
@@ -672,7 +662,7 @@
                                     <div class="task-text">${task.text}</div>
                                     <div class="task-meta">
                                         ${task.assignee ? `<span class="assignee">${task.assignee}</span>` : ''}
-                                        ${task.priority ? `<span class="priority-badge ${task.priority}">${task.priority.toUpperCase()}</span>` : ''}
+                                        <span class="priority-badge ${task.priority || 'medium'}">${(task.priority || 'medium').toUpperCase()}</span>
                                     </div>
                                 </div>
                             </div>
