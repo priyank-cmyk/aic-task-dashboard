@@ -11,11 +11,15 @@
             box-sizing: border-box;
         }
         
+        html {
+            scroll-behavior: smooth;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
         
         .container {
@@ -26,50 +30,50 @@
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 20px;
-            margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 1.2rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         
         .controls {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
         }
         
         .search-box {
             flex: 1;
-            min-width: 250px;
-            padding: 0.75rem 1rem;
+            min-width: 200px;
+            padding: 0.5rem 0.75rem;
             border: 2px solid #667eea;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
         }
         
         .filter-select {
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 0.75rem;
             border: 2px solid #667eea;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
             background: white;
             cursor: pointer;
         }
         
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -88,43 +92,43 @@
         
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
         }
         
         .stat-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 1.5rem;
-            border-radius: 15px;
+            padding: 0.75rem;
+            border-radius: 10px;
             color: white;
             text-align: center;
         }
         
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             opacity: 0.9;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
         
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 800;
         }
         
         .tabs {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
         }
         
         .tab {
             background: rgba(255, 255, 255, 0.9);
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            font-size: 1rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -142,42 +146,42 @@
         
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1rem;
         }
         
         .category {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s;
         }
         
         .category:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         }
         
         .category-header {
-            border-left: 4px solid;
-            padding-left: 1rem;
-            margin-bottom: 1.5rem;
+            border-left: 3px solid;
+            padding-left: 0.75rem;
+            margin-bottom: 1rem;
         }
         
         .category-title {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
             font-weight: 700;
         }
         
         .add-task-btn {
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             cursor: pointer;
             opacity: 0.6;
             transition: opacity 0.2s;
@@ -190,18 +194,19 @@
         .progress-container {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
         }
         
         .task-count {
             font-weight: 600;
             color: #666;
-            min-width: 50px;
+            min-width: 40px;
+            font-size: 0.85rem;
         }
         
         .progress-bar {
             flex: 1;
-            height: 8px;
+            height: 6px;
             background: rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             overflow: hidden;
@@ -213,14 +218,38 @@
             border-radius: 10px;
         }
         
+        .tasks {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        
+        .tasks::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .tasks::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        
+        .tasks::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        
+        .tasks::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+        
         .task {
             display: flex;
             align-items: flex-start;
-            gap: 1rem;
-            padding: 1rem;
+            gap: 0.75rem;
+            padding: 0.75rem;
             background: rgba(0, 0, 0, 0.02);
-            border-radius: 10px;
-            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
             cursor: pointer;
             transition: all 0.2s;
             border: 2px solid transparent;
@@ -246,28 +275,29 @@
         }
         
         .task.priority-high {
-            border-left: 4px solid #ef4444;
+            border-left: 3px solid #ef4444;
         }
         
         .task.priority-medium {
-            border-left: 4px solid #f59e0b;
+            border-left: 3px solid #f59e0b;
         }
         
         .task.priority-low {
-            border-left: 4px solid #10b981;
+            border-left: 3px solid #10b981;
         }
         
         .checkbox {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border: 2px solid #667eea;
-            border-radius: 6px;
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             background: white;
             transition: all 0.2s;
+            font-size: 0.75rem;
         }
         
         .task.completed .checkbox {
@@ -280,22 +310,23 @@
         }
         
         .task-text {
-            line-height: 1.5;
-            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
         }
         
         .task-meta {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.4rem;
             flex-wrap: wrap;
             align-items: center;
         }
         
         .assignee, .priority-badge, .deadline {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
             font-weight: 600;
         }
         
@@ -330,10 +361,10 @@
         
         .task-actions {
             position: absolute;
-            right: 1rem;
-            top: 1rem;
+            right: 0.75rem;
+            top: 0.75rem;
             display: flex;
-            gap: 0.5rem;
+            gap: 0.4rem;
             opacity: 0;
             transition: opacity 0.2s;
         }
@@ -341,9 +372,9 @@
         .task-action-btn {
             background: none;
             border: none;
-            font-size: 1.2rem;
+            font-size: 1rem;
             cursor: pointer;
-            padding: 0.25rem;
+            padding: 0.2rem;
             opacity: 0.6;
             transition: opacity 0.2s;
         }
@@ -371,23 +402,37 @@
         
         .modal-content {
             background: white;
-            padding: 2rem;
-            border-radius: 20px;
+            padding: 1.5rem;
+            border-radius: 15px;
             max-width: 500px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
         }
         
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
         
         .modal-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
         }
         
@@ -404,25 +449,26 @@
         }
         
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         
         .form-label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             font-weight: 600;
+            font-size: 0.9rem;
         }
         
         .form-input, .form-textarea, .form-select {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.6rem;
             border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
         }
         
         .form-textarea {
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
         }
         
@@ -432,7 +478,7 @@
         
         @media (max-width: 768px) {
             h1 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
             .grid {
                 grid-template-columns: 1fr;
@@ -442,6 +488,9 @@
             }
             .search-box {
                 width: 100%;
+            }
+            .tasks {
+                max-height: 300px;
             }
         }
     </style>
@@ -464,17 +513,17 @@
                     <option value="active">Active Only</option>
                     <option value="completed">Completed Only</option>
                 </select>
-                <button class="btn" onclick="exportToExcel()">📊 Export Excel</button>
-                <button class="btn btn-secondary" onclick="openAddTaskModal()">➕ Add Task</button>
+                <button class="btn" onclick="exportToExcel()">📊 Export</button>
+                <button class="btn btn-secondary" onclick="openAddTaskModal()">➕ Add</button>
             </div>
             
             <div class="stats">
                 <div class="stat-card">
-                    <div class="stat-label">Total Tasks</div>
+                    <div class="stat-label">Total</div>
                     <div class="stat-value" id="totalTasks">51</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Completed</div>
+                    <div class="stat-label">Done</div>
                     <div class="stat-value" id="completedTasks">0</div>
                 </div>
                 <div class="stat-card">
@@ -482,7 +531,7 @@
                     <div class="stat-value" id="progress">0%</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Remaining</div>
+                    <div class="stat-label">Left</div>
                     <div class="stat-value" id="remaining">51</div>
                 </div>
             </div>
@@ -490,7 +539,7 @@
         
         <div class="tabs">
             <button class="tab active" onclick="showView('overview')">📊 Overview</button>
-            <button class="tab" onclick="showView('team')">👥 Team View</button>
+            <button class="tab" onclick="showView('team')">👥 Team</button>
             <button class="tab" onclick="showView('priority')">🔥 Priority</button>
         </div>
         
@@ -649,7 +698,6 @@
         let completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '{}');
         let currentEditTask = null;
         
-        // Search and filter
         document.getElementById('searchBox').addEventListener('input', renderAll);
         document.getElementById('priorityFilter').addEventListener('change', renderAll);
         document.getElementById('statusFilter').addEventListener('change', renderAll);
@@ -875,7 +923,6 @@
         }
         
         function exportToExcel() {
-            // Create CSV content
             let csv = 'Category,Task,Status,Priority,Assignee,Deadline,Notes\\n';
             
             Object.keys(tasks).forEach(key => {
@@ -893,7 +940,6 @@
                 });
             });
             
-            // Create blob and download
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
