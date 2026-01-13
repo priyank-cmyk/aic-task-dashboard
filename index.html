@@ -226,10 +226,6 @@
             border-radius: 10px;
         }
         
-        .tasks {
-            /* Removed max-height and overflow */
-        }
-        
         .task {
             display: flex;
             align-items: center;
@@ -238,7 +234,6 @@
             background: rgba(0, 0, 0, 0.02);
             border-radius: 6px;
             margin-bottom: 0.4rem;
-            cursor: pointer;
             transition: all 0.2s;
             border: 2px solid transparent;
             position: relative;
@@ -248,6 +243,10 @@
             background: rgba(102, 126, 234, 0.1);
             border-color: rgba(102, 126, 234, 0.3);
             transform: translateX(4px);
+        }
+        
+        .task:hover .task-actions {
+            opacity: 1;
         }
         
         .task.completed {
@@ -282,6 +281,7 @@
             background: white;
             transition: all 0.2s;
             font-size: 0.7rem;
+            cursor: pointer;
         }
         
         .task.completed .checkbox {
@@ -294,6 +294,7 @@
             display: flex;
             align-items: center;
             gap: 0.6rem;
+            cursor: pointer;
         }
         
         .task-text {
@@ -338,6 +339,107 @@
             color: white;
         }
         
+        .task-actions {
+            display: flex;
+            gap: 0.3rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .task-action-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.2rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .task-action-btn:hover {
+            opacity: 1;
+        }
+        
+        .reminder-badge {
+            background: #8b5cf6;
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
         .hidden {
             display: none;
         }
@@ -361,15 +463,6 @@
             margin-bottom: 0.4rem;
             line-height: 1.5;
             font-size: 0.85rem;
-        }
-        
-        .setup-notice code {
-            background: white;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: monospace;
-            color: #667eea;
-            font-size: 0.8rem;
         }
         
         @media (max-width: 768px) {
@@ -424,15 +517,9 @@
             .task-meta {
                 width: 100%;
             }
-        }
-        
-        @media (max-width: 480px) {
-            .task-text {
-                font-size: 0.8rem;
-            }
             
-            .category-title {
-                font-size: 0.9rem;
+            .task-actions {
+                opacity: 1;
             }
         }
     </style>
@@ -443,10 +530,21 @@
             <h3>📋 Google Sheets Integration Setup</h3>
             <p><strong>Step 1:</strong> Open your Google Sheet: <a href="https://docs.google.com/spreadsheets/d/15OXT4_XdTic12BAYRkRpw31byLtV7AgstL90eVM69cg/edit" target="_blank">AIC RUFF</a></p>
             <p><strong>Step 2:</strong> Go to <strong>Extensions → Apps Script</strong></p>
-            <p><strong>Step 3:</strong> Delete any existing code and paste the script I'll provide below</p>
+            <p><strong>Step 3:</strong> Paste this code:</p>
+            <p style="background: white; padding: 0.5rem; border-radius: 5px; font-family: monospace; font-size: 0.75rem;">
+function doGet() {<br>
+&nbsp;&nbsp;const ss = SpreadsheetApp.getActiveSpreadsheet();<br>
+&nbsp;&nbsp;const sheets = ss.getSheets();<br>
+&nbsp;&nbsp;const data = {};<br>
+&nbsp;&nbsp;sheets.forEach(sheet => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data[sheet.getName()] = sheet.getDataRange().getValues();<br>
+&nbsp;&nbsp;});<br>
+&nbsp;&nbsp;return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);<br>
+}
+            </p>
             <p><strong>Step 4:</strong> Click <strong>Deploy → New Deployment → Web App</strong></p>
             <p><strong>Step 5:</strong> Set "Execute as: Me" and "Who has access: Anyone"</p>
-            <p><strong>Step 6:</strong> Copy the Web App URL and paste it in the input below</p>
+            <p><strong>Step 6:</strong> Copy the Web App URL and paste below</p>
             <div style="margin-top: 0.8rem;">
                 <input type="text" id="apiUrlInput" placeholder="Paste your Google Apps Script Web App URL here" style="width: 100%; padding: 0.6rem; border: 2px solid #667eea; border-radius: 6px; margin-bottom: 0.4rem; font-size: 0.85rem;">
                 <button class="btn" onclick="saveApiUrl()">💾 Save & Connect</button>
@@ -511,10 +609,34 @@
         <div id="priority" class="grid hidden"></div>
     </div>
     
+    <!-- Reminder Modal -->
+    <div id="reminderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">⏰ Set Reminder</h2>
+                <button class="close-btn" onclick="closeReminderModal()">&times;</button>
+            </div>
+            <div id="reminderTaskText" style="background: #f3f4f6; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;"></div>
+            <form id="reminderForm" onsubmit="saveReminder(event)">
+                <div class="form-group">
+                    <label class="form-label">Reminder Date</label>
+                    <input type="date" class="form-input" id="reminderDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Reminder Time</label>
+                    <input type="time" class="form-input" id="reminderTime" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">⏰ Set Reminder</button>
+            </form>
+        </div>
+    </div>
+    
     <script>
         let tasks = {};
         let completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '{}');
+        let taskReminders = JSON.parse(localStorage.getItem('taskReminders') || '{}');
         let apiUrl = localStorage.getItem('sheetsApiUrl') || '';
+        let currentReminderTask = null;
         
         const categoryConfig = {
             '2026 Important Daily': { key: 'importantDaily', name: '🔥 Important Daily', color: '#ef4444' },
@@ -626,6 +748,72 @@
             });
         }
         
+        function openReminderModal(category, index) {
+            event.stopPropagation();
+            const task = tasks[category].tasks[index];
+            currentReminderTask = { category, index, task };
+            
+            document.getElementById('reminderTaskText').textContent = task.text;
+            
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            document.getElementById('reminderDate').value = tomorrow.toISOString().split('T')[0];
+            document.getElementById('reminderTime').value = '09:00';
+            
+            document.getElementById('reminderModal').classList.add('active');
+        }
+        
+        function closeReminderModal() {
+            document.getElementById('reminderModal').classList.remove('active');
+            currentReminderTask = null;
+        }
+        
+        async function saveReminder(event) {
+            event.preventDefault();
+            
+            if (!currentReminderTask) return;
+            
+            const date = document.getElementById('reminderDate').value;
+            const time = document.getElementById('reminderTime').value;
+            const datetime = new Date(`${date}T${time}`);
+            
+            const key = `${currentReminderTask.category}-${currentReminderTask.index}`;
+            taskReminders[key] = {
+                datetime: datetime.toISOString(),
+                date: date,
+                time: time
+            };
+            
+            localStorage.setItem('taskReminders', JSON.stringify(taskReminders));
+            
+            alert(`⏰ Reminder set for ${datetime.toLocaleString()}!\\n\\nNote: For phone notifications, you'll need to integrate with Bhindi's notification system. Contact support for setup.`);
+            
+            closeReminderModal();
+            renderAll();
+        }
+        
+        function deleteReminder(category, index) {
+            event.stopPropagation();
+            const key = `${category}-${index}`;
+            delete taskReminders[key];
+            localStorage.setItem('taskReminders', JSON.stringify(taskReminders));
+            renderAll();
+        }
+        
+        function formatReminderTime(datetime) {
+            const date = new Date(datetime);
+            const now = new Date();
+            const diffTime = date - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 0) return 'Past';
+            if (diffDays === 0) return 'Today ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            if (diffDays === 1) return 'Tomorrow ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+        
         function renderCategory(key, category, container) {
             const taskList = category.tasks || [];
             const filteredTasks = filterTasks(taskList, key);
@@ -654,6 +842,8 @@
                     ${filteredTasks.map((task, i) => {
                         const originalIndex = taskList.indexOf(task);
                         const isCompleted = completedTasks[`${key}-${originalIndex}`];
+                        const reminderKey = `${key}-${originalIndex}`;
+                        const hasReminder = taskReminders[reminderKey];
                         
                         return `
                             <div class="task ${isCompleted ? 'completed' : ''} priority-${task.priority || 'medium'}">
@@ -663,7 +853,14 @@
                                     <div class="task-meta">
                                         ${task.assignee ? `<span class="assignee">${task.assignee}</span>` : ''}
                                         <span class="priority-badge ${task.priority || 'medium'}">${(task.priority || 'medium').toUpperCase()}</span>
+                                        ${hasReminder ? `<span class="reminder-badge">⏰ ${formatReminderTime(hasReminder.datetime)}</span>` : ''}
                                     </div>
+                                </div>
+                                <div class="task-actions">
+                                    ${hasReminder ? 
+                                        `<button class="task-action-btn" onclick="deleteReminder('${key}', ${originalIndex})" title="Delete Reminder">🔕</button>` :
+                                        `<button class="task-action-btn" onclick="openReminderModal('${key}', ${originalIndex})" title="Set Reminder">⏰</button>`
+                                    }
                                 </div>
                             </div>
                         `;
@@ -732,7 +929,7 @@
         }
         
         function exportToExcel() {
-            let csv = 'Category,Task,Status,Priority,Assignee\\n';
+            let csv = 'Category,Task,Status,Priority,Assignee,Reminder\\n';
             
             Object.keys(tasks).forEach(key => {
                 const category = tasks[key];
@@ -742,8 +939,10 @@
                     const taskText = `"${task.text.replace(/"/g, '""')}"`;
                     const priority = (task.priority || 'medium').toUpperCase();
                     const assignee = task.assignee || '';
+                    const reminderKey = `${key}-${i}`;
+                    const reminder = taskReminders[reminderKey] ? formatReminderTime(taskReminders[reminderKey].datetime) : '';
                     
-                    csv += `${categoryName},${taskText},${status},${priority},${assignee}\\n`;
+                    csv += `${categoryName},${taskText},${status},${priority},${assignee},${reminder}\\n`;
                 });
             });
             
