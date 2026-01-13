@@ -638,7 +638,8 @@ function doGet() {<br>
         let apiUrl = localStorage.getItem('sheetsApiUrl') || '';
         let currentReminderTask = null;
         
-        const categoryConfig = {
+        // Default category config - will be updated dynamically
+        let categoryConfig = {
             '2026 Important Daily': { key: 'importantDaily', name: '🔥 Important Daily', color: '#ef4444' },
             '2026 Common': { key: 'common', name: '📋 Common Tasks', color: '#3b82f6' },
             '2026 MA': { key: 'ma', name: '👤 MA Tasks', color: '#8b5cf6' },
@@ -649,6 +650,8 @@ function doGet() {<br>
             '2026 Meeting Tasks': { key: 'meetings', name: '📅 Meetings', color: '#8b5cf6' },
             '2026 Pending Payments': { key: 'payments', name: '💰 Pending Payments', color: '#f97316' }
         };
+        
+        const defaultColors = ['#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#f97316', '#84cc16'];
         
         document.getElementById('searchBox').addEventListener('input', renderAll);
         document.getElementById('priorityFilter').addEventListener('change', renderAll);
@@ -686,26 +689,44 @@ function doGet() {<br>
                 const data = await response.json();
                 
                 tasks = {};
+                let colorIndex = 0;
                 
+                // Process all sheets from Google Sheets
                 Object.keys(data).forEach(sheetName => {
-                    const config = categoryConfig[sheetName];
-                    if (!config) return;
-                    
                     const sheetData = data[sheetName];
                     const taskList = [];
                     
+                    // Skip if no data
+                    if (!sheetData || sheetData.length < 2) return;
+                    
+                    // Start from row 1 (skip header row 0)
                     for (let i = 1; i < sheetData.length; i++) {
                         const row = sheetData[i];
-                        if (row[1]) {
+                        // Check column A (index 0) for task text
+                        if (row[0] && row[0].toString().trim()) {
                             taskList.push({
-                                text: row[1],
-                                assignee: row[2] || '',
+                                text: row[0].toString().trim(),
+                                assignee: row[1] ? row[1].toString().trim() : '',
                                 priority: 'medium'
                             });
                         }
                     }
                     
                     if (taskList.length > 0) {
+                        // Get or create config for this sheet
+                        let config = categoryConfig[sheetName];
+                        if (!config) {
+                            // Create new config for unknown sheets
+                            const key = sheetName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                            config = {
+                                key: key,
+                                name: sheetName,
+                                color: defaultColors[colorIndex % defaultColors.length]
+                            };
+                            categoryConfig[sheetName] = config;
+                            colorIndex++;
+                        }
+                        
                         tasks[config.key] = {
                             name: config.name,
                             color: config.color,
@@ -903,14 +924,17 @@ function doGet() {<br>
             team.innerHTML = '';
             priority.innerHTML = '';
             
+            // Render all categories in overview
             Object.keys(tasks).forEach(key => {
                 renderCategory(key, tasks[key], overview);
             });
             
+            // Team view
             ['ma', 'vr', 'ua', 'common'].forEach(key => {
                 if (tasks[key]) renderCategory(key, tasks[key], team);
             });
             
+            // Priority view
             ['importantDaily', 'payments', 'dubai'].forEach(key => {
                 if (tasks[key]) renderCategory(key, tasks[key], priority);
             });
